@@ -1,0 +1,46 @@
+build/
+install/
+log/
+logs/
+devel/
+build_dev/
+logs_dev/
+logs_dev/
+devel_dev/
+build_release/
+logs_release/
+logs_release/
+devel_release/
+src/playground/
+src/system/adastec_com_gate/generated/*
+.vscode/
+**/.vscode/*
+.catkin_tools/
+*.pyc
+*.bag
+**/.idea/*
+**/cmake-build-debug/*
+node_modules/
+*.cache
+*.onnx
+*.engine
+*.cache
+src/perception/object_recognition/detection/tensorrt_yolo3/*
+# Dynamic config file
+src/utility/adastec_logging/config/daily_round_count.csv
+*.data
+# CanParser Creator env file
+src/utility/CANParserCreator/env
+
+# emuccan_Driver build files
+src/utility/emuccan_driver/driver/*
+src/utility/emuccan_driver/emuc2socketcan.ko
+src/utility/emuccan_driver/emucd_64
+src/utility/emuccan_driver/utility/emucd_64
+src/utility/emuccan_driver/utility/main.o64
+
+# klcowork static analayzer materials
+kwinject.out
+*_tables/
+*.kwlp/ 
+*.kwps/
