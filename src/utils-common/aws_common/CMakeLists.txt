@@ -63,6 +63,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 #############
 ### Tests ###
 #############
+
 enable_testing()
 include(${CMAKE_SOURCE_DIR}/cmake/DefineTestMacros.cmake)
 find_common_test_packages()
@@ -94,12 +95,11 @@ macro(link_test_target target_name)
     target_link_libraries("${target_name}" ${LIBS_FOR_TESTS})
   endif()
 endmacro()
-
-link_test_target(test_aws_log_system)
-link_test_target(test_throttling_manager)
-link_test_target(test_client_configuration_provider)
-link_test_target(test_service_credentials_provider)
-link_test_target(test_wordexp_ros)
+link_test_target(test_aws_log_system ${PROJECT_NAME} ${GTEST_LIBRARIES} ${catkin_LIBRARIES})
+link_test_target(test_throttling_manager ${PROJECT_NAME} ${GTEST_LIBRARIES} ${catkin_LIBRARIES})
+link_test_target(test_client_configuration_provider ${PROJECT_NAME} ${GTEST_LIBRARIES} ${catkin_LIBRARIES})
+link_test_target(test_service_credentials_provider ${PROJECT_NAME} ${GTEST_LIBRARIES} ${catkin_LIBRARIES})
+link_test_target(test_wordexp_ros ${PROJECT_NAME} ${GTEST_LIBRARIES} ${catkin_LIBRARIES})
 
 #############
 ## Install ##

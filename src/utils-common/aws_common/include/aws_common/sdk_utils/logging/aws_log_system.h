@@ -38,6 +38,8 @@ public:
   // Gets the currently configured log level.
   Aws::Utils::Logging::LogLevel GetLogLevel() const override;
 
+  void Flush() override;
+
   // Set a new log level. This has the immediate effect of changing the log.
   void SetLogLevel(Aws::Utils::Logging::LogLevel log_level);
 

@@ -41,6 +41,11 @@ void AWSLogSystem::SetLogLevel(Aws::Utils::Logging::LogLevel log_level)
   configured_log_level_.store(log_level);
 }
 
+void AWSLogSystem::Flush()
+{
+  return;
+}
+
 // NOLINTNEXTLINE(cert-dcl50-cpp)
 void AWSLogSystem::Log(Aws::Utils::Logging::LogLevel log_level, const char * tag,
                        const char * format, ...)
