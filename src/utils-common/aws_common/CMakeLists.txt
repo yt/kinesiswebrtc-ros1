@@ -3,12 +3,6 @@ project(aws_common)
 
 SET(AWS_COMMON_VERSION 1.0.0)
 
-find_package(catkin REQUIRED COMPONENTS
-  roscpp
-)
-
-find_package(AWSSDK REQUIRED COMPONENTS core)
-
 add_compile_options(-std=c++11)
 if (DEFINED ENV{ROS_DISTRO})
     add_definitions(-DCMAKE_ROS_DISTRO="$ENV{ROS_DISTRO}")
@@ -21,12 +15,17 @@ else()
     add_definitions(-DCMAKE_ROS_VERSION="1")
 endif()
 
-catkin_package(
-  INCLUDE_DIRS include
-  LIBRARIES ${PROJECT_NAME}
-)
-
 include(GNUInstallDirs)
+if(NOT EXTERNAL_INSTALL_LOCATION)
+  set(EXTERNAL_INSTALL_LOCATION ${CMAKE_BINARY_DIR}/external)
+endif()
+
+## Add AWS SDK libraries
+set(SERVICE "core" "logs" "monitoring" "kinesis" "iot")
+foreach(_service ${SERVICE})
+  list(APPEND ${PROJECT_NAME}_IMPORTED_LIBRARIES "aws-cpp-sdk-${_service}")
+endforeach()
+add_subdirectory(awssdk)
 
 include_directories(include)
 ## Declare a C++ library
@@ -37,6 +36,7 @@ add_library(${PROJECT_NAME} SHARED
   src/sdk_utils/logging/aws_log_system.cpp
   src/sdk_utils/auth/service_credentials_provider.cpp
   src/fs_utils/wordexp_ros.cpp)
+add_dependencies(${PROJECT_NAME} AWS_SDK_IMPORT)
 
 foreach(_imported_lib ${${PROJECT_NAME}_IMPORTED_LIBRARIES})
   if(NOT TARGET ${_imported_lib})
@@ -51,19 +51,17 @@ foreach(_imported_lib ${${PROJECT_NAME}_IMPORTED_LIBRARIES})
   endif()
 endforeach()
 
-
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME} ${${PROJECT_NAME}_IMPORTED_LIBRARIES})
-target_link_libraries(${PROJECT_NAME} ${AWSSDK_LINK_LIBRARIES})
 target_include_directories(${PROJECT_NAME} PRIVATE ${AWSSDK_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 
+
 #############
 ### Tests ###
 #############
-
 enable_testing()
 include(${CMAKE_SOURCE_DIR}/cmake/DefineTestMacros.cmake)
 find_common_test_packages()
@@ -95,11 +93,12 @@ macro(link_test_target target_name)
     target_link_libraries("${target_name}" ${LIBS_FOR_TESTS})
   endif()
 endmacro()
-link_test_target(test_aws_log_system ${PROJECT_NAME} ${GTEST_LIBRARIES} ${catkin_LIBRARIES})
-link_test_target(test_throttling_manager ${PROJECT_NAME} ${GTEST_LIBRARIES} ${catkin_LIBRARIES})
-link_test_target(test_client_configuration_provider ${PROJECT_NAME} ${GTEST_LIBRARIES} ${catkin_LIBRARIES})
-link_test_target(test_service_credentials_provider ${PROJECT_NAME} ${GTEST_LIBRARIES} ${catkin_LIBRARIES})
-link_test_target(test_wordexp_ros ${PROJECT_NAME} ${GTEST_LIBRARIES} ${catkin_LIBRARIES})
+
+link_test_target(test_aws_log_system)
+link_test_target(test_throttling_manager)
+link_test_target(test_client_configuration_provider)
+link_test_target(test_service_credentials_provider)
+link_test_target(test_wordexp_ros)
 
 #############
 ## Install ##
@@ -127,6 +126,7 @@ CONFIGURE_FILE(${PROJECT_NAME}Config.cmake.in
   ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake @ONLY)
 CONFIGURE_FILE(${PROJECT_NAME}ConfigVersion.cmake.in
   ${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake @ONLY)
+INSTALL(DIRECTORY ${PROJECT_BINARY_DIR}/external/${CMAKE_INSTALL_LIBDIR}/cmake/AWSSDK/ DESTINATION share/${PROJECT_NAME}/cmake)
 INSTALL(FILES ${CMAKE_SOURCE_DIR}/cmake/DefineTestMacros.cmake DESTINATION share/${PROJECT_NAME}/cmake)
 INSTALL(FILES ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake DESTINATION share/${PROJECT_NAME}/cmake)
 INSTALL(FILES ${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake DESTINATION share/${PROJECT_NAME}/cmake)
