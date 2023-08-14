@@ -12,5 +12,5 @@ https://github.com/aws-robotics/utils-common
 ```
 ## Build
 You need to install [aws-sdk-cpp](https://github.com/aws/aws-sdk-cpp). Since ros environments tend to rebuild too frequently I have removed the old sdk setup from aws_common package.
-<br/>While installing the sdk; `cmake <path-to-root-of-aws-sdk> -DCMAKE_BUILD_TYPE=Release -DBUILD_ONLY="core;kinesis"` is enaugh.
+<br/>While installing the sdk; `cmake <path-to-root-of-aws-sdk> -DCMAKE_BUILD_TYPE=Release -DBUILD_ONLY="core;kinesis;logs"` is enaugh.
 
