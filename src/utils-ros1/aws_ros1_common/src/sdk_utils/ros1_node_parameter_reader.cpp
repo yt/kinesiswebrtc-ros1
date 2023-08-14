@@ -59,6 +59,16 @@ AwsError Ros1NodeParameterReader::ReadParam(const ParameterPath & param_path, st
   return ReadParamTemplate(param_path, out);
 }
 
+AwsError Ros1NodeParameterReader::ReadParam(const ParameterPath & param_path, Aws::String & out) const
+{
+  std::string value;
+  AwsError result = ReadParam(param_path, value);
+  if (result == AWS_ERR_OK) {
+    out = Aws::String(value.c_str());
+  }
+  return result;
+}
+
 AwsError Ros1NodeParameterReader::ReadParam(const ParameterPath & param_path,
                                           std::map<std::string, std::string> & out) const
 {

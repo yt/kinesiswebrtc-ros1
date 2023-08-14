@@ -29,6 +29,7 @@ public:
   AwsError ReadParam(const ParameterPath & param_path, double & out) const override;
   AwsError ReadParam(const ParameterPath & param_path, int & out) const override;
   AwsError ReadParam(const ParameterPath & param_path, bool & out) const override;
+  AwsError ReadParam(const ParameterPath & param_path, Aws::String & out) const override;
   AwsError ReadParam(const ParameterPath & param_path, std::string & out) const override;
   AwsError ReadParam(const ParameterPath & param_path, std::map<std::string, std::string> & out) const override;
 };
