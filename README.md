@@ -31,6 +31,8 @@ To build from source you'll need to create a new workspace, clone and checkout t
 roslaunch h264_video_encoder sample_application.launch
 rosrun kinesis_video_webrtc kvsWebrtcClientMaster
 ```
+_Note: I have only converted kvsWebrtcClientMaster.c to ROS code for now._
+
 
 ### Build and run the unit tests
 ```
