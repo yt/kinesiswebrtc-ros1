@@ -27,6 +27,26 @@ To build from source you'll need to create a new workspace, clone and checkout t
 - Source ROS library Path
 
 ### Run the application
+#### Setup your environment with your AWS account credentials and AWS region:
+* First set the appropriate environment variables so you can connect to KVS. More details can be found at [webrtc README](./src/kinesis_video_webrtc/README.md).
+
+```
+export AWS_ACCESS_KEY_ID= <AWS account access key>
+export AWS_SECRET_ACCESS_KEY= <AWS account secret key>
+```
+
+* Optionally, set AWS_SESSION_TOKEN if integrating with temporary token
+
+```
+export AWS_SESSION_TOKEN=<session token>
+```
+
+* Region is optional, if not being set, then us-west-2 will be used as default region.
+
+```
+export AWS_DEFAULT_REGION= <AWS region>
+```
+* Launch the encoder and transmitter
 ```
 roslaunch h264_video_encoder sample_application.launch
 rosrun kinesis_video_webrtc kvsWebrtcClientMaster
