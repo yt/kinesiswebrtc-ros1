@@ -393,7 +393,7 @@ add_executable(
   kvsWebrtcClientViewer
   src/Common.c
   src/kvsWebRTCClientViewer.c)
-target_link_libraries(kvsWebrtcClientViewer kvsWebrtcClient kvsWebrtcSignalingClient kvsCommonLws kvspicUtils websockets)
+target_link_libraries(kvsWebrtcClientViewer kvsWebrtcClient kvsWebrtcSignalingClient kvsCommonLws kvspicUtils websockets ${LIBWEBSOCKETS_LIBRARIES})
 
 add_executable(
         discoverNatBehavior
@@ -402,6 +402,10 @@ target_link_libraries(discoverNatBehavior kvsWebrtcClient)
 
 target_link_libraries(kvsWebrtcClientMaster )
 
-install(TARGETS kvsWebrtcClientMaster kvsWebrtcClientViewer discoverNatBehavior
+install(DIRECTORY open-source/lib/
+  DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+)
+
+install(TARGETS kvsWebrtcClientMaster kvsWebrtcClientViewer discoverNatBehavior 
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
