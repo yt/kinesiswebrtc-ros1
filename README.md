@@ -49,7 +49,7 @@ export AWS_DEFAULT_REGION= <AWS region>
 * Launch the encoder and transmitter
 ```
 roslaunch h264_video_encoder sample_application.launch
-rosrun kinesis_video_webrtc kvsWebrtcClientMaster
+rosrun kinesis_video_webrtc kvsWebrtcClientMaster myChannel /video/encoded
 ```
 _Note: I have only converted kvsWebrtcClientMaster.c to ROS code for now._
 

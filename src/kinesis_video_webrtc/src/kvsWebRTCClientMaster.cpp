@@ -239,9 +239,10 @@ CleanUp:
 int main(int argc, char* argv[])
 {
     init(argc, argv);
+    std::string inputTopicName = argc > 2 ? argv[2] : SAMPLE_INPUT_TOPIC_NAME;
     ros::init(argc, argv, "kinesis_vide_webrtc");
     ros::NodeHandle n;
-    ros::Subscriber something = n.subscribe("/video/encoded", 10, videoFrameCallback);
+    ros::Subscriber something = n.subscribe(inputTopicName, 10, videoFrameCallback);
     ros::Rate loop_rate(10);
     while (ros::ok()) {
         sessionCleanup(gSampleConfiguration);
