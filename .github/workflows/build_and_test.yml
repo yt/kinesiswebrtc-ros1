@@ -1,0 +1,31 @@
+name: Build & Test
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  build_and_test_master:
+    name: Build and Test Master ROS
+    runs-on: ubuntu-20.04
+    steps:
+    # Needed to access the vcs repos file from the workspace
+    - name: Checkout source
+      uses: actions/checkout@v3
+    - uses: ros-tooling/setup-ros@v0.6
+      with:
+        required-ros-distributions: noetic
+    - name: Run action-ros-ci to build and test
+      uses: ros-tooling/action-ros-ci@0.3.3 
+      with:
+        target-ros1-distro: noetic
+        # schedule runs against the default branch (master), so specify release-latest via repos file
+        vcs-repo-file-url: ''
+        package-name:
+          kinesis_video_msgs
+          kinesis_video_webrtc
+          h264_encoder_core
+          h264_video_encoder
+          aws_common
+          aws_ros1_common
