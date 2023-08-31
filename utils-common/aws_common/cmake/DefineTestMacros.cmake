@@ -48,7 +48,7 @@ macro(add_common_gtest target)
   if(catkin_FOUND)
     message(STATUS "Building tests using catkin")
     set(GTEST_LIBRARIES "") # hack so that linking against libgmock doesn't also link against libgtest
-    catkin_add_gmock("${target}" ${ARGN})
+    add_executable("${target}" ${ARGN})
   elseif(ament_cmake_gtest_FOUND)
     message(STATUS "Building tests using ament")
     ament_add_gmock("${target}" ${ARGN})

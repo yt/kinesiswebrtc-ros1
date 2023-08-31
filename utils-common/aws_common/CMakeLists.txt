@@ -63,6 +63,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 ### Tests ###
 #############
 enable_testing()
+find_package(GTest QUIET)
 include(${CMAKE_SOURCE_DIR}/cmake/DefineTestMacros.cmake)
 find_common_test_packages()
 add_common_gtest(test_aws_log_system test/sdk_utils/logging/aws_log_system_test.cpp)
@@ -70,6 +71,7 @@ add_common_gtest(test_throttling_manager test/sdk_utils/throttling_manager_test.
 add_common_gtest(test_client_configuration_provider test/sdk_utils/client_configuration_provider_test.cpp)
 add_common_gtest(test_service_credentials_provider test/sdk_utils/auth/service_credentials_provider_test.cpp)
 add_common_gtest(test_wordexp_ros test/fs_utils/wordexp_ros_test.cpp)
+
 
 add_library(test_utils test/sdk_utils/parameter_reader_mock.cpp)
 target_include_directories(test_utils PUBLIC ${PROJECT_SOURCE_DIR}/test/include)
@@ -87,10 +89,15 @@ set(HEADERS_FOR_TESTS
   ${AWSSDK_INCLUDE_DIR}
 )
 
+
 macro(link_test_target target_name)
   if(TARGET ${target_name})
-    target_include_directories("${target_name}" PRIVATE ${HEADERS_FOR_TESTS})
-    target_link_libraries("${target_name}" ${LIBS_FOR_TESTS})
+    target_include_directories("${target_name}" PRIVATE ${HEADERS_FOR_TESTS} ${aws_common_INCLUDE_DIRS} ${AWSSDK_INCLUDE_DIR})
+    target_link_libraries("${target_name}" ${LIBS_FOR_TESTS} ${GTEST_LIBRARIES}
+    pthread
+    ${aws_common_LIBRARIES}
+    ${PROJECT_NAME})
+    add_test(NAME ${target_name} COMMAND ${target_name} --gtest_output=xml:test_results/)
   endif()
 endmacro()
 
